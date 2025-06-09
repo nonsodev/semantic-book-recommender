@@ -12,7 +12,7 @@ A smart book recommendation system that uses semantic search and emotional tone 
 
 ## Demo
 
-![Book Recommender Interface](demo_img.png)
+![Book Recommender Interface](demo_image.png)
 
 Simply describe what you're looking for, select your preferred category and emotional tone, and get personalized book recommendations!
 
