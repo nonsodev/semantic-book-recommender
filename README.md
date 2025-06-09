@@ -1,3 +1,15 @@
+---
+title: Semantic Book Recommender
+emoji: 📚
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: 4.0.0
+app_file: gradio_dashboard.py
+pinned: false
+license: mit
+---
+
 # Semantic Book Recommender 📚
 
 A smart book recommendation system that uses semantic search and emotional tone analysis to help users discover their next favorite read. Built with LangChain, ChromaDB, and Gradio for an intuitive web interface.
