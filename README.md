@@ -66,7 +66,7 @@ The application will launch a web interface (typically at `http://localhost:7860
 ## Project Structure
 
 ```
-book-recommender-llm/
+semantic-book-recommender/
 ├── gradio_dashboard.py          # Main application file
 ├── requirements.txt             # Python dependencies
 ├── final_book_df.csv           # Book dataset
