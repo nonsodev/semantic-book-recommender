@@ -1,0 +1,166 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Serif%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>BookWise - Responsive</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div
+      class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+      style='--select-button-svg: url(&apos;data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(99,116,136)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e&apos;); font-family: "Noto Serif", "Noto Sans", sans-serif;'
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f4] px-4 sm:px-6 lg:px-10 py-3">
+          <div class="flex items-center gap-4 sm:gap-8">
+            <div class="flex items-center gap-4 text-[#111418]">
+              <div class="size-4">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path></svg>
+              </div>
+              <h2 class="text-[#111418] text-lg font-bold leading-tight tracking-[-0.015em]">BookWise</h2>
+            </div>
+            <div class="flex items-center gap-4 sm:gap-6 lg:gap-9">
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="#">Home</a>
+              <a class="text-[#111418] text-sm font-medium leading-normal" href="#">My Library</a>
+            </div>
+          </div>
+          <div class="flex flex-1 justify-end gap-2 sm:gap-4 lg:gap-8">
+            <label class="hidden sm:flex flex-col min-w-32 md:min-w-40 !h-10 max-w-64">
+              <div class="flex w-full flex-1 items-stretch rounded-xl h-full">
+                <input 
+                  type="search" 
+                  placeholder="Search books..." 
+                  class="flex-1 px-3 py-2 text-sm border border-[#dce0e5] rounded-xl focus:outline-none focus:border-[#1669c9]"
+                />
+              </div>
+            </label>
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 sm:size-10"
+              style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUFyw4SUtL0Bo77m9z_aqCPzx8jrYQ23Iz0YTuhs46ShVxgc5Soj1GQwKpCt9ZxQMSKH5bT-lodTkHcLdV3_qNp12gLkZTdHBtJFt5bDjUqT7CZHFN0QfWSoqRdPy4zx8RW_6N_MEmDJckbi0Ea2st3Kx-6gFPNMFCOLx2ofYQrOiSQ_kbKQw-wWQ7H8CvhkaTaXLXGEcpDXN5EJA8-UbK19-eAe34zXeJkXlqE3873k0hhvB6XGP2etAtUFf0e17br6aohFXWQKw");'
+            ></div>
+          </div>
+        </header>
+        <div class="px-4 sm:px-8 lg:px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <p class="text-[#111418] tracking-light text-2xl sm:text-[32px] font-bold leading-tight min-w-0">Describe Your Ideal Book</p>
+            </div>
+            <div class="flex max-w-full sm:max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+              <label class="flex flex-col min-w-40 flex-1">
+                <textarea
+                  placeholder="Enter a few words or a detailed description of a book you enjoyed or wish to read."
+                  class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] min-h-24 sm:min-h-36 placeholder:text-[#637488] p-[15px] text-base font-normal leading-normal"
+                ></textarea>
+              </label>
+            </div>
+            <div class="flex max-w-full sm:max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+              <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111418] text-base font-medium leading-normal pb-2">Genre</p>
+                <select
+                  class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 bg-[image:--select-button-svg] placeholder:text-[#637488] p-[15px] text-base font-normal leading-normal"
+                >
+                  <option value="">Select a genre</option>
+                  <option value="fiction">Fiction</option>
+                  <option value="mystery">Mystery</option>
+                  <option value="romance">Romance</option>
+                  <option value="scifi">Science Fiction</option>
+                  <option value="fantasy">Fantasy</option>
+                  <option value="biography">Biography</option>
+                  <option value="history">History</option>
+                </select>
+              </label>
+            </div>
+            <div class="flex max-w-full sm:max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+              <label class="flex flex-col min-w-40 flex-1">
+                <p class="text-[#111418] text-base font-medium leading-normal pb-2">Tone</p>
+                <select
+                  class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-14 bg-[image:--select-button-svg] placeholder:text-[#637488] p-[15px] text-base font-normal leading-normal"
+                >
+                  <option value="">Select a tone</option>
+                  <option value="light">Light & Humorous</option>
+                  <option value="serious">Serious & Dramatic</option>
+                  <option value="dark">Dark & Mysterious</option>
+                  <option value="uplifting">Uplifting & Inspiring</option>
+                  <option value="thoughtful">Thoughtful & Reflective</option>
+                </select>
+              </label>
+            </div>
+            <div class="flex px-4 py-3">
+              <button
+                class="flex min-w-[84px] max-w-full sm:max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 px-5 flex-1 bg-[#1669c9] text-white text-base font-bold leading-normal tracking-[0.015em]"
+              >
+                <span class="truncate">Search</span>
+              </button>
+            </div>
+            <h2 class="text-[#111418] text-xl sm:text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Recommended Books</h2>
+            <div class="p-4">
+              <div class="flex flex-col sm:flex-row items-stretch justify-between gap-4 rounded-xl">
+                <div class="flex flex-col sm:flex-[2_2_0px] gap-4">
+                  <div class="flex flex-col gap-1">
+                    <p class="text-[#111418] text-base font-bold leading-tight">The Secret Garden</p>
+                    <p class="text-[#637488] text-sm font-normal leading-normal">Frances Bennett | A young girl discovers a hidden garden and unlocks its mysteries.</p>
+                  </div>
+                  <button
+                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 flex-row-reverse bg-[#f0f2f4] text-[#111418] text-sm font-medium leading-normal w-fit"
+                  >
+                    <span class="truncate">More Details</span>
+                  </button>
+                </div>
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex-1 min-h-32 sm:min-h-0"
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAhvJGw2xq2ulM1eOrAvTprpJpVc1vuviCpOk8vShEIBbBx6QE73cIwxDuKmNFPbS1D_uvqCRhBTFMIRIbEhMCoNvAu4T2c3GUpj-Ek1cgDY-S88u5m3Djfv3jKbmWHyzo9bSf3w1MZgWEevsLl5Ug3NWZ49xQB46X4MpQb9BRL6MjvUI12TbRp-P2ho9PALgBlj7Y2ZIVWKVQSHkwgO7_aeYqeQNTKOS4RxQrwHKBB-inDY6CtKFFi4P2WhiVp9PrnR8g5hVhij1k");'
+                ></div>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex flex-col sm:flex-row items-stretch justify-between gap-4 rounded-xl">
+                <div class="flex flex-col sm:flex-[2_2_0px] gap-4">
+                  <div class="flex flex-col gap-1">
+                    <p class="text-[#111418] text-base font-bold leading-tight">The Adventures of Tom Sawyer</p>
+                    <p class="text-[#637488] text-sm font-normal leading-normal">Mark Twain | A mischievous boy's escapades along the Mississippi River.</p>
+                  </div>
+                  <button
+                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 flex-row-reverse bg-[#f0f2f4] text-[#111418] text-sm font-medium leading-normal w-fit"
+                  >
+                    <span class="truncate">More Details</span>
+                  </button>
+                </div>
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex-1 min-h-32 sm:min-h-0"
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAiL_cW6RPNH4wyHoJFKsAzdorxksRaMXfr-QII83iGD0eJD1GZ8Jlbsq9oxbEIHkL9O0P_AtPUnrX146wgZ6bJefkas6SjVdM1uRe15ZbtlxjWfxz6k057F-6z7_UJhV8KQ5R1NR9hcxYTRhkWo9J6mCCJIY8NQmVc8YKfwKHgHEAC3UV3rPRXOK3bQfw6zdSQrulwq6jDm69jbmy2TiS5hCTkE1igPfIUtedG4KUxMM8p1IRy6OJfHbJfh4V78FoE1bf9VHijwA");'
+                ></div>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex flex-col sm:flex-row items-stretch justify-between gap-4 rounded-xl">
+                <div class="flex flex-col sm:flex-[2_2_0px] gap-4">
+                  <div class="flex flex-col gap-1">
+                    <p class="text-[#111418] text-base font-bold leading-tight">Pride and Prejudice</p>
+                    <p class="text-[#637488] text-sm font-normal leading-normal">Jane Austen | A classic tale of love and societal expectations in 19th-century England.</p>
+                  </div>
+                  <button
+                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-8 px-4 flex-row-reverse bg-[#f0f2f4] text-[#111418] text-sm font-medium leading-normal w-fit"
+                  >
+                    <span class="truncate">More Details</span>
+                  </button>
+                </div>
+                <div
+                  class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl flex-1 min-h-32 sm:min-h-0"
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAvoPL4nOSFDk3mNVaL1VmxSQw32s11eLzXYFT5EnmGXgl7pxTJJ9uEwowWGn54SgqFto0TNEqkwde-sanAoLRLWL_puvGrXW0xwzMX6fQrfDLo9daSrGViJT8rB9WePaw1n_Cm_XK9Uruv4c6M-7RcrpVZfGpEYCJ1wyu9ls87x8w3fA6bi7kUM_aebpza82L8qQ583ikVjOc45xjgiCH0MnJnZJQPbNpTEfQizMBw1EFjE7CI-RnUovvqXJC4-R74Q-KBUbgtJCA");'
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
