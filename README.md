@@ -20,15 +20,15 @@ Simply describe what you're looking for, select your preferred category and emot
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3.10+
 - pip package manager
 
 ### Setup
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
-   cd book-recommender-llm
+   git clone https://github.com/nonsodev/semantic-book-recommender.git)
+   cd semantic-book-recommender
    ```
 
 2. **Install dependencies**
