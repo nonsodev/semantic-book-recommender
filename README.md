@@ -10,6 +10,8 @@ pinned: false
 license: mit
 ---
 
+## 🚀 [Try the Live Demo](https://huggingface.co/spaces/nonsodev/semantic-book-recommender)
+
 # Semantic Book Recommender 📚
 
 A smart book recommendation system that uses semantic search and emotional tone analysis to help users discover their next favorite read. Built with LangChain, ChromaDB, and Gradio for an intuitive web interface.
