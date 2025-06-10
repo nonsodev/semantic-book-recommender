@@ -161,17 +161,17 @@ def create_book_card_html(row):
     if avg_rating > 0:
         stars = create_star_rating(avg_rating)
         rating_display = f"""
-        <div style="margin: 4px 0; display: flex; align-items: center; gap: 8px;">
-            <span style="color: #ffd700; font-size: 14px; letter-spacing: 1px;">{stars}</span>
-            <span style="color: #cccccc; font-size: 12px;">
-                {avg_rating:.1f} ({rating_count:,} reviews)
+        <div style="margin: 2px 0; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+            <span style="color: #ffd700; font-size: 12px; letter-spacing: 1px;">{stars}</span>
+            <span style="color: #cccccc; font-size: 10px;">
+                {avg_rating:.1f} ({rating_count:,})
             </span>
         </div>
         """
     else:
         rating_display = """
-        <div style="margin: 4px 0;">
-            <span style="color: #888888; font-size: 12px;">No ratings available</span>
+        <div style="margin: 2px 0;">
+            <span style="color: #888888; font-size: 10px;">No ratings</span>
         </div>
         """
     
@@ -179,48 +179,53 @@ def create_book_card_html(row):
     download_button = ""
     if download_url and not pd.isna(download_url) and str(download_url).strip():
         download_button = f"""
-        <div style="margin-top: 10px;">
+        <div style="margin-top: 6px;">
             <a href="{download_url}" target="_blank" 
-               style="background-color: #4CAF50; color: white; padding: 8px 16px; 
-                      text-decoration: none; border-radius: 4px; font-size: 12px;">
+               style="background-color: #4CAF50; color: white; padding: 6px 12px; 
+                      text-decoration: none; border-radius: 4px; font-size: 10px; 
+                      display: inline-block; text-align: center;">
                 📖 Get Book
             </a>
         </div>
         """
     
-    # Create the card HTML
+    # Create the card HTML with responsive design
     card_html = f"""
-    <div style="border: 1px solid #444; border-radius: 8px; padding: 16px; margin: 10px; 
-                background-color: #2b2b2b; box-shadow: 0 2px 4px rgba(0,0,0,0.3); 
-                display: flex; gap: 16px; min-height: 250px;">
+    <div style="border: 1px solid #444; border-radius: 8px; padding: 12px; margin: 10px 0; 
+                background-color: #2b2b2b; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
         
-        <div style="flex-shrink: 0;">
-            <img src="{thumbnail}" alt="Book cover" 
-                 style="width: 120px; height: 180px; object-fit: cover; border-radius: 4px;">
-        </div>
-        
-        <div style="flex-grow: 1; display: flex; flex-direction: column;">
-            <h3 style="margin: 0 0 8px 0; color: #ffffff; font-size: 16px; line-height: 1.3;">
-                {title}
-            </h3>
-            
-            <p style="margin: 0 0 8px 0; color: #cccccc; font-size: 14px; font-style: italic;">
-                by {authors_str}
-            </p>
-            
-            <p style="margin: 0 0 8px 0; color: #aaaaaa; font-size: 12px;">
-                Category: {category}
-            </p>
-            
-            {rating_display}
-            
-            <div style="flex-grow: 1; overflow-y: auto; max-height: 100px;">
-                <p style="margin: 0; color: #dddddd; font-size: 13px; line-height: 1.4;">
-                    {description}
-                </p>
+        <div style="display: flex; gap: 12px; flex-direction: row;">
+            <div style="flex-shrink: 0;">
+                <img src="{thumbnail}" alt="Book cover" 
+                     style="width: 80px; height: 120px; object-fit: cover; border-radius: 4px;">
             </div>
             
-            {download_button}
+            <div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column;">
+                <h3 style="margin: 0 0 6px 0; color: #ffffff; font-size: 14px; line-height: 1.2; 
+                           word-wrap: break-word; overflow-wrap: break-word;">
+                    {title}
+                </h3>
+                
+                <p style="margin: 0 0 4px 0; color: #cccccc; font-size: 11px; font-style: italic;">
+                    {authors_str}
+                </p>
+                
+                <p style="margin: 0 0 4px 0; color: #aaaaaa; font-size: 10px;">
+                    {category}
+                </p>
+                
+                {rating_display}
+                
+                <div style="flex-grow: 1; margin: 6px 0;">
+                    <p style="margin: 0; color: #dddddd; font-size: 11px; line-height: 1.3; 
+                              display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; 
+                              overflow: hidden; text-overflow: ellipsis;">
+                        {description}
+                    </p>
+                </div>
+                
+                {download_button}
+            </div>
         </div>
     </div>
     """
