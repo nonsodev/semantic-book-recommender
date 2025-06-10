@@ -72,7 +72,7 @@ def retrieve_semantic_recommendations(
         category: str = None,
         tone: str = None,
         initial_top_k: int = 50,
-        final_top_k: int = 16,
+        final_top_k: int = 8,  # Reduced for better display
 ) -> pd.DataFrame:
     """Retrieve semantic recommendations based on query, category, and tone."""
     
@@ -100,86 +100,207 @@ def retrieve_semantic_recommendations(
 
     return book_recs
 
+def create_book_card_html(row):
+    """Create an HTML card for a single book with full description, ratings, and download link."""
+    
+    # Handle missing description
+    description = row.get("description", "No description available")
+    if pd.isna(description):
+        description = "No description available"
+    
+    # Format authors
+    authors = row.get("authors", "Unknown Author")
+    if pd.isna(authors):
+        authors_str = "Unknown Author"
+    else:
+        authors_split = str(authors).split(";")
+        if len(authors_split) == 2:
+            authors_str = f"{authors_split[0]} and {authors_split[1]}"
+        elif len(authors_split) > 2:
+            authors_str = f"{', '.join(authors_split[:-1])}, and {authors_split[-1]}"
+        else:
+            authors_str = authors
+    
+    # Get other info
+    title = row.get("title_and_subtitle", "Unknown Title")
+    thumbnail = row.get("large_thumbnail", "cover-not-found.jpg")
+    download_url = row.get("url", "")
+    category = row.get("categories", "Unknown")
+    
+    # Handle ratings
+    average_rating = row.get("average_rating", 0)
+    ratings_count = row.get("ratings_count", 0)
+    
+    # Convert to proper numeric values
+    try:
+        avg_rating = float(average_rating) if not pd.isna(average_rating) else 0
+        rating_count = int(ratings_count) if not pd.isna(ratings_count) else 0
+    except (ValueError, TypeError):
+        avg_rating = 0
+        rating_count = 0
+    
+    # Create star rating display
+    def create_star_rating(rating):
+        """Create HTML for star rating display."""
+        full_stars = int(rating)
+        half_star = 1 if (rating - full_stars) >= 0.5 else 0
+        empty_stars = 5 - full_stars - half_star
+        
+        stars_html = ""
+        # Full stars
+        stars_html += "★" * full_stars
+        # Half star
+        if half_star:
+            stars_html += "☆"
+        # Empty stars
+        stars_html += "☆" * empty_stars
+        
+        return stars_html
+    
+    # Format rating display
+    if avg_rating > 0:
+        stars = create_star_rating(avg_rating)
+        rating_display = f"""
+        <div style="margin: 4px 0; display: flex; align-items: center; gap: 8px;">
+            <span style="color: #ffd700; font-size: 14px; letter-spacing: 1px;">{stars}</span>
+            <span style="color: #cccccc; font-size: 12px;">
+                {avg_rating:.1f} ({rating_count:,} reviews)
+            </span>
+        </div>
+        """
+    else:
+        rating_display = """
+        <div style="margin: 4px 0;">
+            <span style="color: #888888; font-size: 12px;">No ratings available</span>
+        </div>
+        """
+    
+    # Create download button if URL exists
+    download_button = ""
+    if download_url and not pd.isna(download_url) and str(download_url).strip():
+        download_button = f"""
+        <div style="margin-top: 10px;">
+            <a href="{download_url}" target="_blank" 
+               style="background-color: #4CAF50; color: white; padding: 8px 16px; 
+                      text-decoration: none; border-radius: 4px; font-size: 12px;">
+                📖 Get Book
+            </a>
+        </div>
+        """
+    
+    # Create the card HTML
+    card_html = f"""
+    <div style="border: 1px solid #444; border-radius: 8px; padding: 16px; margin: 10px; 
+                background-color: #2b2b2b; box-shadow: 0 2px 4px rgba(0,0,0,0.3); 
+                display: flex; gap: 16px; min-height: 250px;">
+        
+        <div style="flex-shrink: 0;">
+            <img src="{thumbnail}" alt="Book cover" 
+                 style="width: 120px; height: 180px; object-fit: cover; border-radius: 4px;">
+        </div>
+        
+        <div style="flex-grow: 1; display: flex; flex-direction: column;">
+            <h3 style="margin: 0 0 8px 0; color: #ffffff; font-size: 16px; line-height: 1.3;">
+                {title}
+            </h3>
+            
+            <p style="margin: 0 0 8px 0; color: #cccccc; font-size: 14px; font-style: italic;">
+                by {authors_str}
+            </p>
+            
+            <p style="margin: 0 0 8px 0; color: #aaaaaa; font-size: 12px;">
+                Category: {category}
+            </p>
+            
+            {rating_display}
+            
+            <div style="flex-grow: 1; overflow-y: auto; max-height: 100px;">
+                <p style="margin: 0; color: #dddddd; font-size: 13px; line-height: 1.4;">
+                    {description}
+                </p>
+            </div>
+            
+            {download_button}
+        </div>
+    </div>
+    """
+    return card_html
+
 def recommend_books(query: str, category: str, tone: str):
     """Main recommendation function for Gradio interface."""
     
     if not query.strip():
-        return []
+        return "<p>Please enter a search query to get book recommendations.</p>"
     
     try:
         recommendations = retrieve_semantic_recommendations(query, category, tone)
-        results = []
-
+        
+        if recommendations.empty:
+            return "<p>No books found matching your criteria. Try adjusting your search terms or filters.</p>"
+        
+        # Create HTML for all book cards
+        html_cards = []
         for _, row in recommendations.iterrows():
-            # Handle missing description
-            description = row.get("description", "No description available")
-            if pd.isna(description):
-                description = "No description available"
-            
-            # Truncate description
-            truncated_desc_split = str(description).split()
-            truncated_description = " ".join(truncated_desc_split[:30]) + "..."
-
-            # Format authors
-            authors = row.get("authors", "Unknown Author")
-            if pd.isna(authors):
-                authors_str = "Unknown Author"
-            else:
-                authors_split = str(authors).split(";")
-                if len(authors_split) == 2:
-                    authors_str = f"{authors_split[0]} and {authors_split[1]}"
-                elif len(authors_split) > 2:
-                    authors_str = f"{', '.join(authors_split[:-1])}, and {authors_split[-1]}"
-                else:
-                    authors_str = authors
-
-            # Create caption
-            title = row.get("title_and_subtitle", "Unknown Title")
-            caption = f"{title} by {authors_str}: {truncated_description}"
-            results.append((row["large_thumbnail"], caption))
-            
-        return results
+            card_html = create_book_card_html(row)
+            html_cards.append(card_html)
+        
+        # Combine all cards with a header
+        full_html = f"""
+        <div style="font-family: Arial, sans-serif; background-color: #1a1a1a; padding: 20px; border-radius: 8px;">
+            <h2 style="color: #ffffff; margin-bottom: 20px;">
+                📚 Found {len(recommendations)} recommendations for: "{query}"
+            </h2>
+            {''.join(html_cards)}
+        </div>
+        """
+        
+        return full_html
     
     except Exception as e:
         print(f"Error in recommend_books: {e}")
-        return []
+        return f"<p>An error occurred while searching for books: {str(e)}</p>"
 
 # Prepare dropdown options
 categories = ["All"] + sorted(books["categories"].unique().tolist())
 tones = ["All", "Happy", "Surprising", "Angry", "Suspenseful", "Sad"]
 
 # Create Gradio interface
-with gr.Blocks(theme=gr.themes.Glass()) as dashboard:
-    gr.Markdown("# 📚 Semantic Book Recommender")
-    gr.Markdown("## Find your next favorite book using AI-powered semantic search!")
+with gr.Blocks(theme=gr.themes.Soft()) as dashboard:
+    gr.Markdown("""
+    # 📚 Semantic Book Recommender
+    ## Find your next favorite book using AI-powered semantic search!
+    
+    Enter a description of what you're looking for, and our AI will find books that match your interests using semantic understanding.
+    """)
 
     with gr.Row():
-        user_query = gr.Textbox(
-            label="Describe your ideal book:",
-            placeholder="e.g., 'A thrilling mystery set in Victorian London'",
-            lines=2,
-            max_lines=3,
-        )
+        with gr.Column(scale=2):
+            user_query = gr.Textbox(
+                label="Describe your ideal book:",
+                placeholder="e.g., 'A thrilling mystery set in Victorian London with complex characters'",
+                lines=3,
+                max_lines=5,
+            )
 
-        with gr.Column():
+        with gr.Column(scale=1):
             category_dropdown = gr.Dropdown(
-                label="Select a category (optional)",
+                label="Filter by category (optional)",
                 choices=categories,
                 value="All",
             )
             tone_dropdown = gr.Dropdown(
-                label="Select an emotional tone (optional)",
+                label="Filter by emotional tone (optional)",
                 choices=tones,
                 value="All",
             )
-            submit_button = gr.Button("🔍 Find Books", variant="primary")
+            submit_button = gr.Button("🔍 Find Books", variant="primary", size="lg")
 
-    gr.Markdown("## 📖 Recommendations")
-    output = gr.Gallery(
-        label="Recommended Books",
-        columns=4,  # Reduced for better mobile experience
-        rows=4,
-        height="auto",
+    gr.Markdown("---")
+    
+    # Use HTML component instead of Gallery for better text display
+    output = gr.HTML(
+        label="Book Recommendations",
+        value="<p>Enter a search query above to get personalized book recommendations!</p>"
     )
 
     # Event handlers
@@ -196,7 +317,16 @@ with gr.Blocks(theme=gr.themes.Glass()) as dashboard:
         outputs=output,
     )
 
-print("App initialized successfully! 🚀")
+    # Add some usage tips at the bottom
+    gr.Markdown("""
+    ### 💡 Tips for better results:
+    - Be specific about what you're looking for (genre, setting, themes, etc.)
+    - Try different emotional tones to discover books with specific moods
+    - Use category filters to narrow down results
+    - Experiment with different search terms if you don't find what you're looking for
+    """)
+
+print("Enhanced app initialized successfully! 🚀")
 
 if __name__ == "__main__":
     dashboard.launch()
