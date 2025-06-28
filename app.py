@@ -61,7 +61,7 @@ try:
     # Better fallback image handling
     books["large_thumbnail"] = np.where(
         books["large_thumbnail"].isna() | books["thumbnail"].isna(),
-        "https://via.placeholder.com/120x180/333333/cccccc?text=No+Cover",
+        "cover-not-found.jpg",
         books["large_thumbnail"]
     )
     # Ensure 'authors' and 'categories' are string type for literal search
