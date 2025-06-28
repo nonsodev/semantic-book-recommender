@@ -9,39 +9,48 @@ app_file: app.py
 pinned: false
 license: mit
 ---
+# Smart Book Recommender 📚
+
+An intelligent book recommendation system with dual search modes: semantic understanding and flexible literal matching. Features emotional tone analysis, category filtering, and a responsive web interface built with LangChain, ChromaDB, and Gradio.
 
 ## 🚀 [Try the Live Demo](https://huggingface.co/spaces/nonsodev/semantic-book-recommender)
 
-# Semantic Book Recommender 📚
-
-A smart book recommendation system that uses semantic search and emotional tone analysis to help users discover their next favorite read. Built with LangChain, ChromaDB, and Gradio for an intuitive web interface.
-
-## Features
-
-- **Semantic Search**: Uses advanced sentence transformers to understand the meaning behind your book preferences
-- **Category Filtering**: Browse recommendations by specific book categories
-- **Emotional Tone Matching**: Find books that match your desired emotional experience (Happy, Surprising, Angry, Suspenseful, Sad)
-- **Visual Gallery**: Browse recommendations with book covers and detailed descriptions
-- **Fast Performance**: Optimized vector database for quick retrieval
-
-## Demo
-
 ![Book Recommender Interface](demo.png)
 
-Simply describe what you're looking for, select your preferred category and emotional tone, and get personalized book recommendations!
+## ✨ Key Features
+
+### 🔍 **Dual Search Modes**
+- **Semantic Search**: AI-powered understanding of natural language queries (e.g., "fantasy adventure with magic")
+- **Literal Search**: Flexible keyword matching with partial word support (e.g., "harry" → Harry Potter books)
+
+### 🎯 **Smart Filtering**
+- **Category Filtering**: Browse by specific book genres
+- **Emotional Tone Matching**: Find books by emotional experience (Happy, Surprising, Angry, Suspenseful, Sad)
+- **Intelligent Sorting**: Results ranked by relevance and emotional scores
+
+### 🎨 **Modern Interface**
+- Responsive card-based design with book covers
+- Star ratings and reader statistics
+- Direct download links when available
+- Dark theme optimized for reading
+
+### ⚡ **Performance Optimized**
+- Cached embedding models for fast startup
+- Efficient ChromaDB vector database
+- Fallback image handling for missing covers
+- Robust error handling and regex search
 
 ## Installation
 
 ### Prerequisites
-
-- Python 3.10+
+- Python 3.8+
 - pip package manager
 
-### Setup
+### Quick Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/nonsodev/semantic-book-recommender.git)
+   git clone https://github.com/nonsodev/semantic-book-recommender.git
    cd semantic-book-recommender
    ```
 
@@ -50,143 +59,270 @@ Simply describe what you're looking for, select your preferred category and emot
    pip install -r requirements.txt
    ```
 
-3. **Ensure data files are present**
-   - `final_book_df.csv`: Main book dataset with metadata
-   - `chroma_books/`: ChromaDB vector database directory
-   - `cover-not-found.jpg`: Placeholder image for missing book covers
+3. **Ensure required data files**
+   ```
+   ├── final_book_df.csv          # Main book dataset
+   ├── tagged_description.txt     # Book descriptions for embedding
+   └── chroma_books/             # Vector database (auto-created)
+   ```
 
-## Usage
+4. **Run the application**
+   ```bash
+   python app.py
+   ```
 
-### Running the Application
+## Usage Guide
 
-```bash
-python gradio_dashboard.py
+### Search Modes
+
+#### 🧠 **Semantic Search**
+Perfect for describing what you want in natural language:
+- "Dark fantasy with dragons and magic"
+- "Romantic comedy set in Paris"
+- "Thrilling mystery in Victorian London"
+- "Science fiction about artificial intelligence"
+
+#### 🔤 **Literal Search**
+Best for finding specific titles or authors:
+- "harry" → finds Harry Potter books
+- "tolkien" → finds J.R.R. Tolkien works
+- "game thrones" → finds Game of Thrones
+- "stephen king" → finds Stephen King novels
+
+### Advanced Features
+
+#### **Category Filtering**
+Narrow results by genre:
+- Fiction, Non-fiction, Fantasy, Romance, Mystery, etc.
+
+#### **Emotional Tone Matching**
+Find books by mood:
+- **Happy**: High joy scores
+- **Surprising**: High surprise scores  
+- **Angry**: High anger scores
+- **Suspenseful**: High fear scores
+- **Sad**: High sadness scores
+
+## How It Works
+
+### 🔬 **Semantic Search Engine**
+```python
+# Uses sentence-transformers for embedding generation
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2",
+    model_kwargs={'device': 'cpu'},
+    encode_kwargs={'normalize_embeddings': True}
+)
+
+# ChromaDB for efficient similarity search
+db_books = Chroma.from_documents(
+    documents, embedding=embeddings,
+    collection_name="books", persist_directory="chroma_books"
+)
 ```
 
-The application will launch a web interface (typically at `http://localhost:7860`) where you can:
+### 🔍 **Flexible Literal Search**
+```python
+# Intelligent regex pattern matching
+def retrieve_literal_recommendations(query, category=None, tone=None):
+    # Creates flexible patterns for partial word matching
+    # Handles special characters and multiple word combinations
+    # Falls back to simple string matching if regex fails
+```
 
-1. Enter a description of your ideal book
-2. Select a category (optional)
-3. Choose an emotional tone (optional)
-4. Click "Submit" to get recommendations
+### 🎭 **Emotional Intelligence**
+Books are analyzed and scored across five emotional dimensions:
+- **Joy**: Happiness, humor, uplifting content
+- **Surprise**: Plot twists, unexpected elements
+- **Anger**: Conflict, tension, dramatic intensity  
+- **Fear**: Suspense, thriller elements, mystery
+- **Sadness**: Emotional depth, tragic elements
 
-### Example Queries
-
-- "A thrilling mystery set in Victorian London"
-- "Romantic comedy with strong female protagonist"
-- "Science fiction about artificial intelligence"
-- "Historical fiction during World War II"
+### 🎨 **Smart UI Components**
+```python
+def create_book_card_html(row):
+    # Responsive card design with:
+    # - Book cover with fallback handling
+    # - Star ratings visualization  
+    # - Author formatting (handles multiple authors)
+    # - Truncated descriptions with full content
+    # - Download links when available
+```
 
 ## Project Structure
 
 ```
 semantic-book-recommender/
-├── gradio_dashboard.py          # Main application file
-├── requirements.txt             # Python dependencies
-├── final_book_df.csv           # Book dataset
-├── cover-not-found.jpg         # Placeholder image
-├── chroma_books/               # Vector database
-├── notebooks/
-│   ├── data-exploration.ipynb  # Data analysis
-│   ├── download_url.ipynb      # Data download utilities
-│   ├── final_df.ipynb          # Data processing
-│   ├── sentiment_analysis.ipynb # Emotion analysis
-│   ├── supervised_clean.py     # Data cleaning
-│   └── test_classification.ipynb # Model testing
-└── data/
-    ├── books_cleaned.csv       # Processed book data
-    ├── books_with_categories.csv
-    ├── books_with_sentiment.csv
-    ├── books_with_urls.csv
-    ├── search_progress.csv     # Processing logs
-    ├── tagged_description.txt  # Tagged descriptions
-    └── to_drop.txt            # Items to exclude
+├── app.py                      # Main application (your updated file)
+├── requirements.txt            # Python dependencies
+├── final_book_df.csv          # Book dataset with metadata
+├── tagged_description.txt     # Book descriptions for embedding
+├── chroma_books/              # ChromaDB vector database
+├── demo.png                   # Interface screenshot
+└── README.md                  # This file
 ```
-
-## How It Works
-
-### 1. Semantic Search
-- Uses `sentence-transformers/all-MiniLM-L6-v2` for fast, high-quality embeddings
-- ChromaDB stores and retrieves similar books based on vector similarity
-- Initial retrieval of top 50 matches, refined to top 16 recommendations
-
-### 2. Filtering & Ranking
-- **Category Filter**: Narrows results to specific genres
-- **Emotional Tone**: Ranks books by emotion scores (joy, surprise, anger, fear, sadness)
-- **Relevance**: Maintains semantic relevance while applying filters
-
-### 3. User Interface
-- Clean, modern design using Gradio's Glass theme
-- Gallery view with book covers and descriptions
-- Responsive layout for different screen sizes
-
-## Data Sources
-
-The book dataset includes:
-- **Metadata**: Title, authors, ISBN, categories, publication info
-- **Content**: Descriptions, summaries
-- **Visual**: Thumbnail images, large cover images
-- **Emotional Scores**: Joy, surprise, anger, fear, sadness ratings
 
 ## Configuration
 
-### Embedding Models
-You can switch between different embedding models in `gradio_dashboard.py`:
+### **Embedding Models**
+Switch between models for different performance profiles:
 
 ```python
-# Fast and good quality (default)
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+# Fast and efficient (default)
+"sentence-transformers/all-MiniLM-L6-v2"
 
 # Higher quality, slower
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+"sentence-transformers/all-mpnet-base-v2"  
+
+# Multilingual support
+"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 ```
 
-### Search Parameters
-Adjust recommendation parameters:
+### **Search Parameters**
+Customize recommendation behavior:
 
 ```python
 def retrieve_semantic_recommendations(
     query: str,
-    category: str = None,
-    tone: str = None,
-    initial_top_k: int = 50,    # Initial retrieval count
-    final_top_k: int = 16,      # Final recommendation count
+    initial_top_k: int = 50,    # Initial retrieval size
+    final_top_k: int = 8,       # Final recommendations shown
+    category: str = None,       # Category filter
+    tone: str = None           # Emotional tone filter
 )
 ```
 
-## Development
+### **UI Customization**
+Modify card display and styling:
 
-### Adding New Features
+```python
+# Book card dimensions
+style="width: 80px; height: 120px"
 
-1. **New Emotional Tones**: Add emotion columns to your dataset and update the `tones` list
-2. **Additional Filters**: Extend the filtering logic in `retrieve_semantic_recommendations()`
-3. **UI Improvements**: Modify the Gradio interface in the `dashboard` block
+# Description truncation
+-webkit-line-clamp: 4
 
-### Data Processing Pipeline
+# Rating display
+create_star_rating(rating)  # ★★★★☆ format
+```
 
-The project includes several notebooks for data processing:
-- Data exploration and cleaning
-- Sentiment analysis for emotional scoring
-- URL processing for book covers
-- Model testing and validation
+## Data Schema
+
+### Book Dataset Columns
+```python
+# Core metadata
+'isbn13', 'title_and_subtitle', 'authors', 'categories'
+
+# Visual elements  
+'thumbnail', 'large_thumbnail'
+
+# Ratings and metrics
+'average_rating', 'ratings_count'
+
+# Content
+'description'
+
+# Emotional scores
+'joy', 'surprise', 'anger', 'fear', 'sadness'
+
+# Access
+'url'  # Download/purchase links
+```
+
+## API Reference
+
+### **Main Functions**
+
+```python
+# Semantic search with AI understanding
+retrieve_semantic_recommendations(query, category, tone, initial_top_k, final_top_k)
+
+# Literal search with flexible matching  
+retrieve_literal_recommendations(query, category, tone, final_top_k)
+
+# HTML card generation
+create_book_card_html(row)
+
+# Main Gradio interface function
+recommend_books(query, category, tone, search_type)
+```
 
 ## Dependencies
 
-Key libraries used:
-- **LangChain**: Vector database integration
-- **ChromaDB**: Vector storage and similarity search
-- **Gradio**: Web interface
-- **HuggingFace Transformers**: Sentence embeddings
-- **Pandas**: Data manipulation
-- **NumPy**: Numerical operations
+```python
+# Core ML and Vector Database
+langchain-chroma>=0.1.0
+langchain-huggingface>=0.0.3  
+langchain-community>=0.2.0
+sentence-transformers>=2.2.0
+
+# Data Processing
+pandas>=1.5.0
+numpy>=1.21.0
+
+# Web Interface
+gradio>=4.0.0
+
+# Text Processing  
+regex>=2022.0.0
+```
+
+## Performance Tips
+
+### **Startup Optimization**
+```python
+# Model caching for faster restarts
+os.environ["HF_HOME"] = "/tmp/hf_cache"
+os.environ["TRANSFORMERS_CACHE"] = "/tmp/hf_cache"
+```
+
+### **Search Optimization**
+- Use semantic search for exploratory queries
+- Use literal search for known titles/authors
+- Combine category and tone filters for precision
+- Try variations if initial results aren't satisfactory
+
+### **Memory Management**
+- ChromaDB persists to disk automatically
+- Embeddings cached after first load
+- Efficient pandas operations for filtering
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### Development Areas
+- [ ] Additional emotional dimensions
+- [ ] Multi-language support
+- [ ] User preference learning
+- [ ] Social features (reviews, ratings)
+- [ ] Advanced filtering (publication year, page count)
+
+## Troubleshooting
+
+### **Common Issues**
+
+**ChromaDB not found:**
+```bash
+# The app will auto-create from tagged_description.txt
+# Ensure this file exists in the project root
+```
+
+**Model download slow:**
+```bash
+# Models cache automatically after first download
+# Subsequent starts will be much faster
+```
+
+**No search results:**
+```bash
+# Try switching between search modes
+# Reduce filter constraints (category/tone)
+# Use broader search terms
+```
 
 ## License
 
@@ -194,11 +330,26 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- Sentence Transformers for powerful embedding models
-- ChromaDB for efficient vector storage
-- Gradio for making ML interfaces accessible
-- The open-source community for book metadata
+- **Sentence Transformers** for powerful embedding models
+- **ChromaDB** for efficient vector storage and retrieval
+- **Gradio** for creating accessible ML interfaces
+- **LangChain** for seamless AI integration
+- **HuggingFace** for model hosting and ecosystem
 
 ---
+
+## 🎯 Example Queries to Try
+
+### Semantic Search
+- "Epic fantasy with complex magic systems"
+- "Cozy mystery in a small town setting"  
+- "Hard science fiction about space exploration"
+- "Historical romance during the Regency era"
+
+### Literal Search
+- "agatha christie" (find Agatha Christie novels)
+- "dune" (find Dune series books)
+- "pride prejudice" (find Pride and Prejudice)
+- "lord rings" (find Lord of the Rings)
 
 **Happy Reading! 📖✨**
